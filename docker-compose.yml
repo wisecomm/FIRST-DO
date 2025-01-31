@@ -26,19 +26,75 @@ services:
       - /etc/localtime:/etc/localtime
       - my-volume:/data
       - my-volume:/etc/letsencrypt
-  mariadb:
-    container_name: mariadb
-    image: mariadb:latest
+
+  portainer-ce:
+    container_name: portainer-ce
+    #image: ${docker_images[portainer-ce-2.18.3]}
+    image: portainer/portainer-ce:latest
     restart: always
-    environment:
-      - MARIADB_ROOT_PASSWORD=maria123
-      - TZ=Asia/Seoul
+    command: --admin-password "$$2y$$05$$fxUAxf0243TQooozoRPoUuiTsu.0Wl/iWm6syUNnDaxYhD4mQ56D."
     ports:
-      - "3306:3306"
+      - '9000:9000'
+      - "9443:9443"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - my-volume:/data
+    
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
+    restart: unless-stopped
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - bootstrap.memory_lock=true
+      - TZ=Asia/Seoul
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
     volumes:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - my-volume:/var/lib/mysql
-      - my-volume:/etc/mysql/conf.d
-      - my-volume:/root/script
+      - my-volume:/usr/share/elasticsearch/data      
 
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.17.1
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - TZ=Asia/Seoul
+    ports:
+      - "5601:5601"
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - my-volume:/usr/share/kibana/data
+
+  postgresql:
+    container_name: postgres
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=postgres
+      - TZ=Asia/Seoul
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - /var/lib/docker/volumes/mac-dev-docker_my-volume/_data/postgres:/var/lib/postgresql/data

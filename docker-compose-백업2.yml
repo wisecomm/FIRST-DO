@@ -1,9 +1,14 @@
-version: '3'
+name: mac-dev-docker    # 프로젝트 이름 추가
 
 networks:
     default:
-      name: my-docker-default
+#      name: my-docker-default
       driver: bridge
+
+volumes:
+  my-volume:
+#    name: my-volume
+    driver: local
 
 services:
   nginx-proxy-manager:
@@ -19,9 +24,10 @@ services:
     volumes:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - /Users/danyoh/docker/volumes/our-vol/nginx-proxy-manager/data:/data
-      - /Users/danyoh/docker/volumes/our-vol/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+      - my-volume:/data
+      - my-volume:/etc/letsencrypt
   mariadb:
+    container_name: mariadb
     image: mariadb:latest
     restart: always
     environment:
@@ -32,7 +38,7 @@ services:
     volumes:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - /Users/danyoh/docker/volumes/our-vol/mariadb/data:/var/lib/mysql
-      - /Users/danyoh/docker/volumes/our-vol/mariadb/conf.d:/etc/mysql/conf.d
-      - /Users/danyoh/docker/volumes/our-vol/mariadb/script:/root/script
+      - my-volume:/var/lib/mysql
+      - my-volume:/etc/mysql/conf.d
+      - my-volume:/root/script
 
