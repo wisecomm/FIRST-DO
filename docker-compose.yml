@@ -7,7 +7,8 @@ networks:
 
 volumes:
   my-volume:
-#    name: my-volume
+    driver: local
+  postgresql-volume:
     driver: local
 
 services:
@@ -97,4 +98,4 @@ services:
     volumes:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - /var/lib/docker/volumes/mac-dev-docker_my-volume/_data/postgres:/var/lib/postgresql/data
+      - postgresql-volume:/var/lib/postgresql/data
