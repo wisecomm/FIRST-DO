@@ -1,0 +1,6 @@
+# 볼륨설정은 왜 하는지 확인 
+docker volume create my-volume
+docker volume ls
+docker volume inspect my-volume
+- 삭제 
+docker volume rm my-volume
