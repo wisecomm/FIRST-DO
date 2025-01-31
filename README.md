@@ -1,6 +1,11 @@
+
+# 설치 
+docker-compose.yml
+
 # 볼륨설정 확인
 docker volume ls
 docker volume inspect my-volume
+
 # 네트워크 이름 확인
 docker network ls
 
