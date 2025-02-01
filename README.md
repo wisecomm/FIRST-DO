@@ -52,9 +52,15 @@ docker network ls
 ??? 프로그램 설치 볼륨 잡기
 ??? 환경변수 
 
+
+# 포트 변경 시
+- run 명령은 도커 생성 하고 재실행 ( docker up 이 나을지 ㅎㅎㅎ) 
+docker run -p 8080:8080 -d spring-01-0.0.1.jar --platform linux/amd64
+
   ##################################################################
   # 확인 사항 
   ##################################################################
   - nginx-proxy-manager 사용중 ... nginx 에는 되는 기능이 안된다고 하는데 ???
-  - postgresql volums 수정 : 다른 볼륨의 데이터 중복으로 생기는것 같음 
+
+  - postgresql volums 생성 : 다른 볼륨의 데이터 중복으로 생기는것 같음 
      /var/lib/docker/volumes/mac-dev-docker_my-volume/_data/postgres:/var/lib/postgresql/data

@@ -1,4 +1,4 @@
-name: mac-dev-docker    # 프로젝트 이름 추가
+# name: mac-dev-docker    # 프로젝트 이름 추가
 
 networks:
     default:
@@ -9,6 +9,8 @@ volumes:
   my-volume:
     driver: local
   postgresql-volume:
+    driver: local
+  server-myspring-volume:
     driver: local
 
 services:
@@ -99,3 +101,23 @@ services:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
       - postgresql-volume:/var/lib/postgresql/data
+
+  # my spring application
+  server-myspring:
+      container_name: server-myspring
+      image: spring-01-0.0.1.jar
+      restart: always
+      environment:
+        - TZ=Asia/Seoul
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+        - /etc/localtime:/etc/localtime
+      ports:
+        - "8080:8080"
+      links:
+        - postgresql:db
+      depends_on:
+        - postgresql
+    
+    
