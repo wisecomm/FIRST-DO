@@ -16,7 +16,9 @@ volumes:
     driver: local
   postgresql-vol:
     driver: local
-
+  server-myspring-vol:
+    driver: local
+      
 services:
   nginx-proxy-manager:
     container_name: nginx-proxy-manager
@@ -117,8 +119,9 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
         - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
         - /etc/localtime:/etc/localtime
+        - server-myspring-vol:/app/logs
       ports:
-        - "8080:8080"
+      - "8080:8080"
       links:
         - postgresql:db
       depends_on:
