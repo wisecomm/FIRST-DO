@@ -120,7 +120,7 @@ services:
   # my spring application
   server-myspring:
       container_name: server-myspring
-      image: spring-01-0.0.1.jar
+      image: simple-spring-boot-app
       restart: always
       environment:
         - TZ=Asia/Seoul
