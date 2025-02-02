@@ -2,8 +2,11 @@ name: mac-dev    # 프로젝트 이름 추가
 
 networks:
     default:
-#      name: my-docker-default
+      name: default_bridge
       driver: bridge
+      ipam:
+        config:
+          - subnet: 172.18.0.0/16
 
 volumes:
   nginx-proxy-manager-vol:
@@ -110,6 +113,9 @@ services:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
       - postgresql-vol:/var/lib/postgresql/data
+    networks:
+      default:
+        ipv4_address: 172.18.0.5
 
   # my spring application
   server-myspring:
