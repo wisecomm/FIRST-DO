@@ -18,6 +18,8 @@ volumes:
     driver: local
   server-myspring-vol:
     driver: local
+  shared-data-vol:
+    driver: local    
       
 services:
   nginx-proxy-manager:
@@ -51,6 +53,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - portainer-ce-vol:/data
+      - shared-data-vol:/shared
     
   elasticsearch:
     container_name: elasticsearch
@@ -120,6 +123,7 @@ services:
         - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
         - /etc/localtime:/etc/localtime
         - server-myspring-vol:/app/logs
+        - shared-data-vol:/shared
       ports:
       - "8080:8080"
       links:
