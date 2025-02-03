@@ -56,7 +56,3 @@ docker network ls
 
 - run 명령은 도커 생성 하고 재실행 ( docker up 이 나을지 ㅎㅎㅎ)
   docker run -p 8080:8080 -d spring-01-0.0.1.jar --platform linux/amd64
-
-# 확인 사항
-
-- nginx-proxy-manager 사용중 ... nginx 에는 되는 기능이 안된다고 하는데 ( nginx-proxy-manager 대처 사용해야 하나 ? ㅎㅎㅎ)
