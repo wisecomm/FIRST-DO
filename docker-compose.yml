@@ -1,12 +1,12 @@
-name: mac-dev    # 프로젝트 이름 추가
+name: mac-dev # 프로젝트 이름 추가
 
 networks:
-    default:
-      name: default_bridge
-      driver: bridge
-      ipam:
-        config:
-          - subnet: 172.18.0.0/16
+  default:
+    name: default_bridge
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
 
 volumes:
   nginx-proxy-manager-vol:
@@ -15,19 +15,19 @@ volumes:
     driver: local
   elasticsearch-vol:
     driver: local
-  kibana-vol:  
+  kibana-vol:
     driver: local
   postgresql-vol:
     driver: local
   server-myspring-vol:
     driver: local
   shared-data-vol:
-    driver: local    
-      
+    driver: local
+
 services:
   nginx-proxy-manager:
     container_name: nginx-proxy-manager
-    image: 'jc21/nginx-proxy-manager:latest'
+    image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
     ports:
       - "80:80"
@@ -48,7 +48,7 @@ services:
     restart: always
     command: --admin-password "$$2y$$05$$fxUAxf0243TQooozoRPoUuiTsu.0Wl/iWm6syUNnDaxYhD4mQ56D."
     ports:
-      - '9000:9000'
+      - "9000:9000"
       - "9443:9443"
     environment:
       - TZ=Asia/Seoul
@@ -57,7 +57,7 @@ services:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - portainer-ce-vol:/data
       - shared-data-vol:/shared
-    
+
   elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
@@ -79,7 +79,7 @@ services:
     volumes:
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - elasticsearch-vol:/usr/share/elasticsearch/data      
+      - elasticsearch-vol:/usr/share/elasticsearch/data
 
   kibana:
     container_name: kibana
@@ -119,22 +119,21 @@ services:
 
   # my spring application
   server-myspring:
-      container_name: server-myspring
-      image: simple-spring-boot-app
-      restart: always
-      environment:
-        - TZ=Asia/Seoul
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
-        - /etc/localtime:/etc/localtime
-        - server-myspring-vol:/app/logs
-        - shared-data-vol:/shared
-      ports:
+    container_name: server-myspring
+    image: simple-spring-boot-app
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - server-myspring-vol:/home/myspringapp/logs
+      - shared-data-vol:/shared
+    entrypoint: sh /home/myspringapp/start.sh
+    ports:
       - "8080:8080"
-      links:
-        - postgresql:db
-      depends_on:
-        - postgresql
-    
-    
+    links:
+      - postgresql:db
+    depends_on:
+      - postgresql
