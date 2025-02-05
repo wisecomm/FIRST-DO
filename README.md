@@ -44,4 +44,9 @@ docker network ls
 # 포트 변경 시
 1. 메뉴얼로 변경 ㅎㅎㅎ  
 run 명령은 도커 생성 하고 재실행 ( docker up 이 나을지 ㅎㅎㅎ)  
-docker run -p 8080:8080 -d spring-01-0.0.1.jar --platform linux/amd64
+
+
+- 샘플 
+1. mkdir -p ./home/gsall/docker
+2. docker-compose --f docker-compose-myprj.yml --env-file=docker-base.cfg
+2. docker compose --file docker-compose-myprj.yml --env-file=docker-base.cfg
