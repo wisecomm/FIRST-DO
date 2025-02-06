@@ -6,13 +6,109 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.18.0.0/16
+        - subnet: 172.18.0.0/24
+
+volumes:
+  shared-data-vol:
+    driver: local
 
 services:
+  portainer-ce:
+    container_name: portainer-ce
+    #image: ${docker_images[portainer-ce-2.18.3]}
+    image: portainer/portainer-ce:latest
+    restart: always
+    command: --admin-password "$$2y$$05$$fxUAxf0243TQooozoRPoUuiTsu.0Wl/iWm6syUNnDaxYhD4mQ56D."
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - ${container_home}/portainer-ce/data:/data
+      - shared-data-vol:/shared
+
+  nginx-proxy-manager:
+    container_name: nginx-proxy-manager
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/nginx-proxy-manager/data:/data
+      - ${container_home}/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
+    restart: unless-stopped
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - bootstrap.memory_lock=true
+      - TZ=Asia/Seoul
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/elasticsearch/usr/share/elasticsearch/data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.17.1
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - TZ=Asia/Seoul
+    ports:
+      - "5601:5601"
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/kibana/usr/share/kibana/data:/usr/share/kibana/data
+
+  postgresql:
+    container_name: postgres
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=postgres
+      - TZ=Asia/Seoul
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/postgresql/var/lib/postgresql/data:/var/lib/postgresql/data
+    networks:
+      default:
+        ipv4_address: 172.18.0.5
+
   # my spring application
-  server-myspring:
-    container_name: server-myspring
-    image: simple-spring-boot-app
+  myspringapp:
+    container_name: myspringapp
+    image: openjdk:17.0.2-jdk-slim-bullseye
     restart: always
     environment:
       - TZ=Asia/Seoul
@@ -20,9 +116,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      # mac 에서는 에러 발생 리눅스에서는 되는지 확인 필요
-      #      - ${container_home}/myspringapp/source:/home/myspringapp
-      - ${container_home}/myspringapp/logs:/home/myspringapp/logs
+      - ${container_home}/myspringapp:/home/myspringapp
+      - shared-data-vol:/shared
     entrypoint: sh /home/myspringapp/start.sh
     ports:
       - "8080:8080"
+    links:
+      - postgresql:db
+    depends_on:
+      - postgresql

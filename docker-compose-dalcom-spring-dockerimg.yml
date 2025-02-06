@@ -1,0 +1,26 @@
+name: ${docker_prj_name} # 프로젝트 이름 추가
+
+networks:
+  default:
+    name: ${docker_prj_name:-docker}-base-net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+
+services:
+  # my spring application
+  myspringapp:
+    container_name: myspringapp
+    image: simple-spring-boot-app
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/myspringapp/logs:/home/myspringapp/logs
+    entrypoint: sh /home/myspringapp/start.sh
+    ports:
+      - "8080:8080"

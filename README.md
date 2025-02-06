@@ -46,10 +46,9 @@
 1. 메뉴얼로 변경 ㅎㅎㅎ  
    run 명령은 도커 생성 하고 재실행 ( docker up 이 나을지 ㅎㅎㅎ)
 
-# 환경
+# 파일 설명
+- docker-compose-ubuntu.yml : 맥에서 도커에 우분트 설치
+- docker-compose-dalcom-spring.yml : 스프링 jar 복사해서 기본 테스트함
+- docker-compose-dalcom-spring-dockerimg.yml : 현재는 안사용하지만 스프링 도커 이미지 만들어 사용하는 방법
 
-# 샘플
-
-mkdir -p /home/gsall/docker
-
-docker-compose --file docker-compose-dalcom.yml --env-file=docker-base-mac.cfg up
+ # 실제 사용 파일 - R-docker-맥-테스트.md 참조

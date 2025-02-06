@@ -1,6 +1,11 @@
-# 초기 작업
+# 맥 우분투 설치 후 테스트  
+> mkdir -p /Users/danyoh/docker ( docker-base-mac.cfg 바꾸고 수정)
+> docker-compose --file docker-compose-ubuntu.yml --env-file=docker-base-mac.cfg up
 
-- 도커 설치
+
+
+# ubuntu 설치 후 내부에 도커 설치 (리눅스와 동일)
+- 도커 설치 후 
   apt-get install -y docker.io
 - 도커 컴포즈 설치
   apt-get update -y
@@ -29,4 +34,4 @@
   PermitRootLogin yes
   service ssh restart
 
-  > docker-compose --file docker-compose-dalcom.yml --env-file=docker-base-mac.cfg up
+  

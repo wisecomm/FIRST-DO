@@ -20,7 +20,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - ${container_home}/ubuntu-data:/home/ubuntu
+      # Bind mount for persistent data
+      - ${container_home}/ubuntu/data:/data
+      # For configuration files
+      - ${container_home}/ubuntu/etc/myapp:/etc/myapp
+      # For logs
+      - ${container_home}/ubuntu/var/logs:/var/log
     ports:
       - "2222:22"
       - "8022:80"
