@@ -51,4 +51,6 @@
 - docker-compose-dalcom-spring.yml : 스프링 jar 복사해서 기본 테스트함
 - docker-compose-dalcom-spring-dockerimg.yml : 현재는 안사용하지만 스프링 도커 이미지 만들어 사용하는 방법
 
- # 실제 사용 파일 - R-docker-맥-테스트.md 참조
+# 실제 사용 파일 - R-docker-맥-테스트.md 참조
+
+# shard 공유 안만들고 직접 바운드 볼률에 만들어서 해도 될것 같음
