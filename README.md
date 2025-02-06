@@ -1,13 +1,13 @@
 # 홈브루 설치 : docker desktop, docker, docker compose
 
 # 도커 명령어들
-> docker-compose.yml
-> 볼륨설정 확인
-docker volume ls
-docker volume inspect mac-dev-docker_my-volume
+
+> 볼륨설정 확인 (바운드 볼륨 사용)
+> docker volume ls
+> docker volume inspect mac-dev-docker_my-volume
 
 > 네트워크 이름 확인
-docker network ls
+> docker network ls
 
 # 설치 후 확인
 
@@ -42,11 +42,21 @@ docker network ls
   shared-data-vol:/shared ( 프로그램 볼륨 확인해보면 /shared 에 존재 )
 
 # 포트 변경 시
+
 1. 메뉴얼로 변경 ㅎㅎㅎ  
-run 명령은 도커 생성 하고 재실행 ( docker up 이 나을지 ㅎㅎㅎ)  
+   run 명령은 도커 생성 하고 재실행 ( docker up 이 나을지 ㅎㅎㅎ)
 
+# 환경
 
-- 샘플 
-1. mkdir -p ./home/gsall/docker
-2. docker-compose --f docker-compose-myprj.yml --env-file=docker-base.cfg
-2. docker compose --file docker-compose-myprj.yml --env-file=docker-base.cfg
+- 맥 테스트
+  > mkdir -p /Users/ojeong-il/docker
+  > docker-compose --file docker-compose-dalcom.yml --env-file=docker-base-mac.cfg up
+  > -- 리눅스 깔고 테스트 진행
+        # mac 에서는 에러 발생 리눅스에서는 되는지 확인 필요
+        #      - ${container_home}/myspringapp/source:/home/myspringapp
+
+# 샘플
+
+mkdir -p /home/gsall/docker
+
+docker-compose --file docker-compose-dalcom.yml --env-file=docker-base-mac.cfg up
