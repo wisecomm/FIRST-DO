@@ -8,7 +8,22 @@
   curl -L "https://github.com/docker/compose/releases/download/v2.29.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose
 
-passwd root : 패스워드 초기화 1234
+# 리눅스 사용자 초기화
+
+- passwd root : 패스워드 초기화 1234
+
+- 사용자 초기화
+  useradd dalcomuser
+  passwd dalcomuser
+  gpasswd -a dalcomuser docker
+  ??? tee /etc/sudoers.d/dalcomuser
+  mkdir -p /home/dalcomuser/docker
+  chown -R dalcomuser.dalcomuser /home/dalcomuser/docker
+
+- FTP : vi /etc/vsftpd.conf 마지막에 추가 pasv_enable=NO
+  write_enable=YES
+  /etc/ftpusers 수정 # 주석 처리
+  service vsftpd restart
 
 - SSH Root 접속 허용 설정 (/etc/ssh/sshd_config)
   PermitRootLogin yes
