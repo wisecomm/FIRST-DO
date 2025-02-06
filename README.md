@@ -48,13 +48,6 @@
 
 # 환경
 
-- 맥 테스트
-  > mkdir -p /Users/ojeong-il/docker
-  > docker-compose --file docker-compose-dalcom.yml --env-file=docker-base-mac.cfg up
-  > -- 리눅스 깔고 테스트 진행 ????
-        # mac 에서는 에러 발생 리눅스에서는 되는지 확인 필요
-        #      - ${container_home}/myspringapp/source:/home/myspringapp
-
 # 샘플
 
 mkdir -p /home/gsall/docker

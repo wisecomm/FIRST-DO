@@ -1,0 +1,35 @@
+name: ${docker_prj_name} # 프로젝트 이름 추가
+
+networks:
+  default:
+    name: ${docker_prj_name:-docker}-base-net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+services:
+  # my spring application
+  ubuntu-mac:
+    container_name: ubuntu-mac
+    image: ubuntu:22.04
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/ubuntu-data:/home/ubuntu
+    ports:
+      - "2222:22"
+      - "8022:80"
+      - "20:20" # FTP Data
+      - "21:21" # FTP Control
+      - "40000-40009:40000-40009" # FTP Passive Ports
+    command: >
+      bash -c "apt-get update && 
+      apt-get install -y openssh-server curl wget git vim vsftpd && 
+      service ssh start && 
+      service vsftpd start && 
+      tail -f /dev/null"
