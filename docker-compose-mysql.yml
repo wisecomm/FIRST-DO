@@ -9,18 +9,20 @@ networks:
         - subnet: 172.18.0.0/24
 
 services:
-  # my spring application
-  myspringapp:
-    container_name: myspringapp
-    image: openjdk:17.0.2-jdk-slim-bullseye
+  mariadb:
+    image: mariadb:latest
     restart: always
     environment:
+      - MARIADB_ROOT_PASSWORD=maria123
       - TZ=Asia/Seoul
+    ports:
+      - "3306:3306"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
       - /etc/localtime:/etc/localtime
-      - ${container_home}/myspringapp:/home/myspringapp
-    entrypoint: sh /home/myspringapp/start.sh
-    ports:
-      - "8080:8080"
+      - ${container_home}/mariadb/data:/var/lib/mysql
+      - ${container_home}/mariadb/conf.d:/etc/mysql/conf.d
+      - ${container_home}/mariadb/script:/root/script
+    networks:
+      default:
+        ipv4_address: 172.18.0.5
