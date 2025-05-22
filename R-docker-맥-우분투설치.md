@@ -1,6 +1,6 @@
 # 맥 우분투 설치 후 테스트  
 > mkdir -p /Users/danyoh/docker ( docker-base-mac.cfg 바꾸고 수정)
-> docker-compose --file docker-compose-ubuntu.yml --env-file=docker-base-mac.cfg up
+> docker-compose --file docker-compose-ubuntu.yml --env-file=docker-base-mac.cfg up -d
 
 
 

@@ -17,13 +17,13 @@
 
 - passwd root : 패스워드 초기화 1234
 
-- 사용자 초기화
-  useradd dalcomuser
-  passwd dalcomuser (1234)
-  gpasswd -a dalcomuser docker
-  ??? tee /etc/sudoers.d/dalcomuser
-  mkdir -p /home/dalcomuser/docker
-  chown -R dalcomuser.dalcomuser /home/dalcomuser/docker
+# 사용자 초기화
+  useradd somrouser
+  passwd somrouser (somro2025)
+  gpasswd -a somrouser docker
+  echo 'somrouser ALL=NOPASSWD: ALL' > /etc/sudoers.d/somrouser
+  mkdir -p /home/somrouser/docker
+  chown -R somrouser /home/somrouser/docker
 
 - FTP : vi /etc/vsftpd.conf 마지막에 추가 pasv_enable=NO
   write_enable=YES
