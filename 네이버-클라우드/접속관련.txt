@@ -1,0 +1,14 @@
+
+
+# 접속 사이트
+https://console.ncloud.com/vpc-compute/server
+
+
+/Users/danyoh  디렉토리 danyoh.pem
+
+# ssh root@211.188.53.220
+# sftp root, 211.188.53.220
+
+
+
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
