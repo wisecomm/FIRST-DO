@@ -13,7 +13,7 @@
 
 - nginx-proxy-manager
   : http://localhost:81/login 초기비번 : admin@example.com changeme
-  비번 변경 : 12345678
+  아이디 : danyoh@gmail.com 비번 변경 : 12345678
 
 - portainer-ce
   : http://localhost:9000/ 초기 : admin admin1234567

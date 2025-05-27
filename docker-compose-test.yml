@@ -1,0 +1,26 @@
+name: ${docker_prj_name} # 프로젝트 이름 추가
+
+networks:
+  default:
+    name: ${docker_prj_name:-docker}-base-net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+
+services:
+  nginx-proxy-manager:
+    container_name: nginx-proxy-manager
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ${container_home}/nginx-proxy-manager/data:/data
+      - ${container_home}/nginx-proxy-manager/etc/letsencrypt:/etc/letsencrypt
